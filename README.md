@@ -1,2 +1,2 @@
-It's here: [Xia Huus'blog](aphasia.top)
+It's here: [Xia Huus'blog](https://www.aphasia.top)
 
