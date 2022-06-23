@@ -1,10 +1,10 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>go - Tag - Aphasia&#39;s personal blog</title>
-        <link>https://aphasia51.github.io/tags/go/</link>
-        <description>go - Tag - Aphasia&#39;s personal blog</description>
+        <title>go - Category - Aphasia&#39;s personal blog</title>
+        <link>https://aphasia51.github.io/categories/go/</link>
+        <description>go - Category - Aphasia&#39;s personal blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Aphasia51@gmail.com (Aphasia)</managingEditor>
-            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 23 Jun 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://aphasia51.github.io/tags/go/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 23 Jun 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://aphasia51.github.io/categories/go/" rel="self" type="application/rss+xml" /><item>
     <title>Gin框架与Radix-Tree</title>
     <link>https://aphasia51.github.io/radix-tree/</link>
     <pubDate>Thu, 23 Jun 2022 00:00:00 &#43;0000</pubDate><author>

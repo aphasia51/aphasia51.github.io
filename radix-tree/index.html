@@ -5,23 +5,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title class="pjax-title">一致性哈希算法 - Aphasia&#39;s personal blog</title><meta name="Description" content="Aphasia&#39;s persional blog"><meta property="og:title" content="一致性哈希算法" />
-<meta property="og:description" content="图解一致性哈希算法" />
+    <title class="pjax-title">Gin框架与Radix-Tree - Aphasia&#39;s personal blog</title><meta name="Description" content="Aphasia&#39;s persional blog"><meta property="og:title" content="Gin框架与Radix-Tree" />
+<meta property="og:description" content="Gin框架与Radix Tree
+tags: [&ldquo;go&rdquo;, gin&quot;] categories: [&ldquo;go&rdquo;, &ldquo;gin&rdquo;]
+Trie字典树，前缀树。是一种有序多叉树结构，利用字符串的公共前缀来减少查询的时间。
+ 根节点不包含字符(目的是能包括所有字符串)，其余每个节点都只包含一个字符。 每个节点的子节点字符不同，保证唯一性。  Radix Tree前缀压缩树，优化了Trie的空间。如果树中某个父节点的子节点唯一，那么其子节点将与父节点合并，即一个节点可以包含多个字符串。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://aphasia51.github.io/consistent_hash_algorithm/" /><meta property="og:image" content="https://aphasia51.github.io/avatar.jpg"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-02-22T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-02-22T00:00:00+00:00" /><meta property="og:site_name" content="Hugo DoIt Theme Documentation" />
+<meta property="og:url" content="https://aphasia51.github.io/radix-tree/" /><meta property="og:image" content="https://aphasia51.github.io/avatar.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-06-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-06-23T00:00:00+00:00" /><meta property="og:site_name" content="Hugo DoIt Theme Documentation" />
 
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://aphasia51.github.io/avatar.jpg"/>
 
-<meta name="twitter:title" content="一致性哈希算法"/>
-<meta name="twitter:description" content="图解一致性哈希算法"/>
+<meta name="twitter:title" content="Gin框架与Radix-Tree"/>
+<meta name="twitter:description" content="Gin框架与Radix Tree
+tags: [&ldquo;go&rdquo;, gin&quot;] categories: [&ldquo;go&rdquo;, &ldquo;gin&rdquo;]
+Trie字典树，前缀树。是一种有序多叉树结构，利用字符串的公共前缀来减少查询的时间。
+ 根节点不包含字符(目的是能包括所有字符串)，其余每个节点都只包含一个字符。 每个节点的子节点字符不同，保证唯一性。  Radix Tree前缀压缩树，优化了Trie的空间。如果树中某个父节点的子节点唯一，那么其子节点将与父节点合并，即一个节点可以包含多个字符串。"/>
 <meta name="application-name" content="Aphasia">
 <meta name="apple-mobile-web-app-title" content="Aphasia">
 
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="wn.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://aphasia51.github.io/consistent_hash_algorithm/" /><link rel="prev" href="https://aphasia51.github.io/demo/" /><link rel="next" href="https://aphasia51.github.io/radix-tree/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="wn.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://aphasia51.github.io/radix-tree/" /><link rel="prev" href="https://aphasia51.github.io/consistent_hash_algorithm/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript>
     
@@ -31,13 +37,13 @@
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "一致性哈希算法",
+        "headline": "Gin框架与Radix-Tree",
         "inLanguage": "en",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/aphasia51.github.io\/consistent_hash_algorithm\/"
-        },"image": ["https:\/\/pic3.zhimg.com\/80\/v2-638986264022faadefd1d1a294a5a066_720w.jpg"],"genre": "posts","wordcount":  16 ,
-        "url": "https:\/\/aphasia51.github.io\/consistent_hash_algorithm\/","datePublished": "2022-02-22T00:00:00+00:00","dateModified": "2022-02-22T00:00:00+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@id": "https:\/\/aphasia51.github.io\/radix-tree\/"
+        },"image": ["https:\/\/pic3.zhimg.com\/80\/v2-638986264022faadefd1d1a294a5a066_720w.jpg"],"genre": "posts","keywords": "go","wordcount":  13 ,
+        "url": "https:\/\/aphasia51.github.io\/radix-tree\/","datePublished": "2022-06-23T00:00:00+00:00","dateModified": "2022-06-23T00:00:00+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Aphasia","logo": "https:\/\/aphasia51.github.io\/avatar.jpg"},"author": {
                 "@type": "Person",
@@ -131,28 +137,24 @@
         <h2 class="toc-title">Contents</h2>
         <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
   <ul>
-    <li><a href="#负载均衡">负载均衡</a></li>
-    <li><a href="#一致性哈希算法">一致性哈希算法</a>
-      <ul>
-        <li><a href="#基本概念">基本概念</a></li>
-      </ul>
-    </li>
+    <li><a href="#trie">Trie</a></li>
+    <li><a href="#radix-tree">Radix Tree</a></li>
   </ul>
 </nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">一致性哈希算法</h1><div class="post-meta">
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Gin框架与Radix-Tree</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="https://github.com/xiahuaS" title="Author" target="_blank" rel="noopener noreffer author" class="author">Aphasia</a>
-                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-series">series <a href="/series/algorithm/"><i class="far fa-list-alt fa-fw"></i>algorithm</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-22">2022-02-22</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2022-02-22">2022-02-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;16 words&nbsp;
+                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-category">category <a href="/categories/go/"><i class="far fa-folder fa-fw"></i>go</a></span>&nbsp;<span class="post-category">and</span>&nbsp;<span class="post-series">series <a href="/series/gin/"><i class="far fa-list-alt fa-fw"></i>gin</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-06-23">2022-06-23</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2022-06-23">2022-06-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;13 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
-                                    <span>Series - algorithm</span>
+                                    <span>Series - gin</span>
                                     <span><i class="details-icon fas fa-angle-right"></i></span>
                                 </div>
                                 <div class="details-content series-content">
                                     <nav>
-                                        <ul><li><span class="active">一致性哈希算法</span></li></ul>
+                                        <ul><li><span class="active">Gin框架与Radix-Tree</span></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc" id="toc-static"  kept="">
@@ -162,76 +164,64 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#负载均衡">负载均衡</a></li>
-    <li><a href="#一致性哈希算法">一致性哈希算法</a>
-      <ul>
-        <li><a href="#基本概念">基本概念</a></li>
-      </ul>
-    </li>
+    <li><a href="#trie">Trie</a></li>
+    <li><a href="#radix-tree">Radix Tree</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><div class="details admonition note open">
-                <div class="details-summary admonition-title">
-                    <i class="icon fas fa-pencil-alt fa-fwnote"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
-                </div>
-                <div class="details-content">
-                    <div class="admonition-content">
-                        This article was last updated on <span class="timeago" datetime="2022-02-22T00:00:00" title="February 22, 2022">2022-02-22</span>, the content may be out of date.</div>
-                </div>
-            </div><p>图解一致性哈希算法</p>
-<h2 id="负载均衡" class="headerLink">
-    <a href="#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1" class="header-mark"></a>负载均衡</h2><p>顾名思义，负载均衡就是分摊压力，例如在我们的大多数网站背后，都会不止有一台服务器在支撑网站的业务。毕竟一个人的力量是有限的，那一台服务器所能承受的压力、并发量、数据量也都是有限的，那么我们在拥有多台服务器后，要怎么分配‘压力’才显得合理呢？</p>
-<div align=center><img src="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesfzjh-1.png"></div>
-<p>那么聪明的你肯定已经想到了，我们把压力平分给服务器就好了啊！就像发牌一样轮流转发请求给服务器不就行了嘛。对的，这其实就是一个简单的解决负载均衡的方法，但是我们还需要考虑到的一点是，每台服务器的配置是有所区别的，所以我们还可以给不同的机器根据配置设置权重，将配置差一点的机器权重设置得低一点，让配置好一点的服务器承受更多的压力，这种算法就被称之为加权轮询。</p>
-<br>
-<p>了解完负载均衡后，下面我们来看一个应用场景！</p>
-<p>假设我们有两万张商品的图片需要缓存，而我们手中有4台缓存服务器，那么根据我们上面讲到的负载均衡，你很容易就会想到将这2万张图片平均缓存到这4台服务器中。的确这样可以解决我们的问题，但是如果我们要访问某个缓存时，最坏的情况需要遍历4台缓存服务器，设想如果你是访问者，当我们的后台以这种方式去查询的时候，等待中的访问者是可以明显感受到效率太低的，我们做缓存的目的不就是减少等待时长吗？</p>
-<p>说到这里读者们应该都想到了哈希算法，对关键字进行哈希计算然后取模(确保结果小于等于哈希表的长度)，通过结果来选择对应的缓存服务器。</p>
-<div align=center><img src="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imageseasy_hash.png"></div>
-<p>很好，看上去好像万无一失，所有的图片都可以有‘家’可归。But，这个商品购物网站越做越大，需要缓存的图片越来越多，4台服务器已经支撑不起了，这好办，多搞几台服务器不就好了，先上两台！如果我们还是使用同样的公式来决定该选择哪一台缓存服务器[<code>hash(demo.jpg) % 6</code>]，有没有突然发现，几乎所有需要缓存的图片的位置都发生了改变！同样我们如果我们因为机器故障要移除一台缓存服务器，那么几乎所有的数据都需要迁移！所以一致性哈希算法就该上场了~~</p>
-<h2 id="一致性哈希算法" class="headerLink">
-    <a href="#%e4%b8%80%e8%87%b4%e6%80%a7%e5%93%88%e5%b8%8c%e7%ae%97%e6%b3%95" class="header-mark"></a>一致性哈希算法</h2><h3 id="基本概念" class="headerLink">
-    <a href="#%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" class="header-mark"></a>基本概念</h3><p>名字有相同之处，它们俩使用的方法也有相似之处。一致性哈希算法也是采用取模的方法，而刚才我们是对缓存服务器的数量取模，现在一致性哈希算法是对2^32取模。不对啊，那得需要多少台缓存服务器才能用得上这个算法啊？不急，我们来看看它的巧妙之处。</p>
-<p>如果我们把使用一致性哈希算法取得的结果做成一个圆，那它是不是就变成这样了：</p>
-<div align=center><img src="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imageshash_circle.png"></div>
-<p>每一个使用一致性哈希算法得出的结果都可以在哈希环上找到一个自己的‘位置’，也就是说环上的点就是从0到2^32-1。</p>
-<p>但是我们该怎么计算出自己的位置呢？以我们刚才的情景为例，分两步:</p>
+            </div><div class="content" id="content"><p>Gin框架与Radix Tree</p>
+<p>tags: [&ldquo;go&rdquo;, gin&quot;]
+categories: [&ldquo;go&rdquo;, &ldquo;gin&rdquo;]</p>
+<h2 id="trie" class="headerLink">
+    <a href="#trie" class="header-mark"></a>Trie</h2><p>字典树，前缀树。是一种有序多叉树结构，利用字符串的公共前缀来减少查询的时间。</p>
 <ul>
-<li>对存储节点做哈希映射。对应我们这里的对缓存服务器做哈希映射，也就是说把缓存服务器给分到哈希环上面去，例如用它的<code>IP</code>地址进行哈希</li>
-<li>对数据做哈希映射。这里我们就要用到刚才说的对2^32取模</li>
+<li>根节点不包含字符(目的是能包括所有字符串)，其余每个节点都只包含一个字符。</li>
+<li>每个节点的子节点字符不同，保证唯一性。</li>
 </ul>
-<div align=center><img src="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imageshash_circle-1.png"></div>
-<p>从图中我们也可以看到，计算出在哈希环上的位置后，往顺时针遇到的第一个节点，就是选择得缓存的服务器节点位置，即K1缓存在A上。那么我们再回到刚才遇到的问题，减少或增加一个节点：</p>
-<div align=center><img src="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imageshash_circle-2.png"></div></div>
+<p><img
+        class="lazyload"
+        data-src="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagestrie.png"
+        data-srcset="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagestrie.png, https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagestrie.png 1.5x, https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagestrie.png 2x"
+        data-sizes="auto"
+        alt="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagestrie.png"
+        title="image-20220623105051775"></p>
+<h2 id="radix-tree" class="headerLink">
+    <a href="#radix-tree" class="header-mark"></a>Radix Tree</h2><p>前缀压缩树，优化了Trie的空间。如果树中某个父节点的子节点唯一，那么其子节点将与父节点合并，即一个节点可以包含多个字符串。</p>
+<p><img
+        class="lazyload"
+        data-src="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesradix_tree.png"
+        data-srcset="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesradix_tree.png, https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesradix_tree.png 1.5x, https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesradix_tree.png 2x"
+        data-sizes="auto"
+        alt="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesradix_tree.png"
+        title="image-20220623111554740"></p>
+</div>
 
         <div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2022-02-22</span>
+                <span>Updated on 2022-06-23</span>
             </div>
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line">
-            <div class="post-info-md"><span><a class="link-to-mardown" href=/consistent_hash_algorithm/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
-                    </span><span>|&nbsp;<a class="link-to-edit" href=https://github.com/aphasia51/aphasia51.github.io/edit/main/exampleSite/content/posts\Consistent_hash_algorithm.md target="_blank" rel="noopener noreferrer">Edit this page</a>
-                    </span><span>|&nbsp;<a class="link-to-report" href=https://github.com/xiahuaS/aphasia51.github.io/issues/new?title=[bug]%20%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95&body=|Field|Value|%0A|-|-|%0A|Title|%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95|%0A|Url|https://aphasia51.github.io/consistent_hash_algorithm/|%0A|Filename|https://github.com/HEIGE-PCloud/DoIt/blob/main/exampleSite/content/posts\Consistent_hash_algorithm.md| target="_blank" rel="noopener noreferrer">Report issue</a>
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/radix-tree/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
+                    </span><span>|&nbsp;<a class="link-to-edit" href=https://github.com/aphasia51/aphasia51.github.io/edit/main/exampleSite/content/posts\gin\radix-tree.md target="_blank" rel="noopener noreferrer">Edit this page</a>
+                    </span><span>|&nbsp;<a class="link-to-report" href=https://github.com/xiahuaS/aphasia51.github.io/issues/new?title=[bug]%20Gin%E6%A1%86%E6%9E%B6%E4%B8%8ERadix-Tree&body=|Field|Value|%0A|-|-|%0A|Title|Gin%E6%A1%86%E6%9E%B6%E4%B8%8ERadix-Tree|%0A|Url|https://aphasia51.github.io/radix-tree/|%0A|Filename|https://github.com/HEIGE-PCloud/DoIt/blob/main/exampleSite/content/posts\gin\radix-tree.md| target="_blank" rel="noopener noreferrer">Report issue</a>
                     </span></div>
             <div class="post-info-share">
-                <span><a href="#" onclick="return false;" title="Share on Twitter" data-sharer="twitter" data-url="https://aphasia51.github.io/consistent_hash_algorithm/" data-title="一致性哈希算法"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="Share on Facebook" data-sharer="facebook" data-url="https://aphasia51.github.io/consistent_hash_algorithm/"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="Share on Hacker News" data-sharer="hackernews" data-url="https://aphasia51.github.io/consistent_hash_algorithm/" data-title="一致性哈希算法"><i class="fab fa-hacker-news fa-fw"></i></a><a href="#" onclick="return false;" title="Share on Line" data-sharer="line" data-url="https://aphasia51.github.io/consistent_hash_algorithm/" data-title="一致性哈希算法"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" onclick="return false;" title="Share on 微博" data-sharer="weibo" data-url="https://aphasia51.github.io/consistent_hash_algorithm/" data-title="一致性哈希算法"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="Share on 百度" data-sharer="baidu" data-url="https://aphasia51.github.io/consistent_hash_algorithm/" data-title="一致性哈希算法"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></i></a><a href="#" onclick="return false;" title="Share on Telegram" data-sharer="telegram" data-url="https://aphasia51.github.io/consistent_hash_algorithm/" data-title="一致性哈希算法" data-web><i class="fab fa-telegram-plane fa-fw"></i></a></span>
+                <span><a href="#" onclick="return false;" title="Share on Twitter" data-sharer="twitter" data-url="https://aphasia51.github.io/radix-tree/" data-title="Gin框架与Radix-Tree" data-hashtags="go"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="Share on Facebook" data-sharer="facebook" data-url="https://aphasia51.github.io/radix-tree/" data-hashtag="go"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="Share on Hacker News" data-sharer="hackernews" data-url="https://aphasia51.github.io/radix-tree/" data-title="Gin框架与Radix-Tree"><i class="fab fa-hacker-news fa-fw"></i></a><a href="#" onclick="return false;" title="Share on Line" data-sharer="line" data-url="https://aphasia51.github.io/radix-tree/" data-title="Gin框架与Radix-Tree"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" onclick="return false;" title="Share on 微博" data-sharer="weibo" data-url="https://aphasia51.github.io/radix-tree/" data-title="Gin框架与Radix-Tree"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="Share on 百度" data-sharer="baidu" data-url="https://aphasia51.github.io/radix-tree/" data-title="Gin框架与Radix-Tree"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></i></a><a href="#" onclick="return false;" title="Share on Telegram" data-sharer="telegram" data-url="https://aphasia51.github.io/radix-tree/" data-title="Gin框架与Radix-Tree" data-web><i class="fab fa-telegram-plane fa-fw"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">go</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/demo/" class="prev" rel="prev" title=""><i class="fas fa-angle-left fa-fw"></i></a>
-            <a href="/radix-tree/" class="next" rel="next" title="Gin框架与Radix-Tree">Gin框架与Radix-Tree<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/consistent_hash_algorithm/" class="prev" rel="prev" title="一致性哈希算法"><i class="fas fa-angle-left fa-fw"></i>一致性哈希算法</a></div>
 </div>
 <div id="comments"><div id="giscus"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://giscus.app/">giscus</a>.

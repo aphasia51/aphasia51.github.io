@@ -4,9 +4,19 @@
         <link>https://aphasia51.github.io/</link>
         <description>Aphasia&#39;s persional blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Aphasia51@gmail.com (Aphasia)</managingEditor>
-            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 22 Feb 2022 00:00:00 &#43;0000</lastBuildDate>
+            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 23 Jun 2022 00:00:00 &#43;0000</lastBuildDate>
             <atom:link href="https://aphasia51.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Gin框架与Radix-Tree</title>
+    <link>https://aphasia51.github.io/radix-tree/</link>
+    <pubDate>Thu, 23 Jun 2022 00:00:00 &#43;0000</pubDate><author>
+        <name>Aphasia</name>
+    </author><guid>https://aphasia51.github.io/radix-tree/</guid>
+    <description><![CDATA[Gin框架与Radix Tree
+tags: [&ldquo;go&rdquo;, gin&quot;] categories: [&ldquo;go&rdquo;, &ldquo;gin&rdquo;]
+Trie字典树，前缀树。是一种有序多叉树结构，利用字符串的公共前缀来减少查询的时间。
+ 根节点不包含字符(目的是能包括所有字符串)，其余每个节点都只包含一个字符。 每个节点的子节点字符不同，保证唯一性。  Radix Tree前缀压缩树，优化了Trie的空间。如果树中某个父节点的子节点唯一，那么其子节点将与父节点合并，即一个节点可以包含多个字符串。]]></description>
+</item><item>
     <title>一致性哈希算法</title>
     <link>https://aphasia51.github.io/consistent_hash_algorithm/</link>
     <pubDate>Tue, 22 Feb 2022 00:00:00 &#43;0000</pubDate><author>

@@ -1,17 +1,16 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>go - Tag - Aphasia&#39;s personal blog</title>
-        <link>https://aphasia51.github.io/tags/go/</link>
-        <description>go - Tag - Aphasia&#39;s personal blog</description>
+        <title>gin&#34; - Tag - Aphasia&#39;s personal blog</title>
+        <link>https://aphasia51.github.io/tags/gin/</link>
+        <description>gin&#34; - Tag - Aphasia&#39;s personal blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Aphasia51@gmail.com (Aphasia)</managingEditor>
-            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 23 Jun 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://aphasia51.github.io/tags/go/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 23 Jun 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://aphasia51.github.io/tags/gin/" rel="self" type="application/rss+xml" /><item>
     <title>Gin框架与Radix-Tree</title>
     <link>https://aphasia51.github.io/radix-tree/</link>
     <pubDate>Thu, 23 Jun 2022 00:00:00 &#43;0000</pubDate><author>
         <name>Aphasia</name>
     </author><guid>https://aphasia51.github.io/radix-tree/</guid>
     <description><![CDATA[Gin框架与Radix Tree
-tags: [&ldquo;go&rdquo;, gin&quot;] categories: [&ldquo;go&rdquo;, &ldquo;gin&rdquo;]
 Trie字典树，前缀树。是一种有序多叉树结构，利用字符串的公共前缀来减少查询的时间。
  根节点不包含字符(目的是能包括所有字符串)，其余每个节点都只包含一个字符。 每个节点的子节点字符不同，保证唯一性。  Radix Tree前缀压缩树，优化了Trie的空间。如果树中某个父节点的子节点唯一，那么其子节点将与父节点合并，即一个节点可以包含多个字符串。]]></description>
 </item></channel>

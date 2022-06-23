@@ -38,7 +38,7 @@
     </script></head>
 
 <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
-        function setTheme(theme) {document.body.setAttribute('theme', theme);}
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
         function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
         function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
         if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
@@ -126,6 +126,24 @@
         alt="avatar.jpg"
         title="avatar.jpg" height="6rem" width="6rem"></a></div><div class="links"><a href="https://github.com/xiahuaS" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href="https://t.me/@Aphasia51" title="Telegram" target="_blank" rel="noopener noreffer me"><i class="fab fa-telegram-plane fa-fw"></i></a><a href="https://space.bilibili.com/478149120" title="bilibili" target="_blank" rel="noopener noreffer me"><i data-svg-src="/svg/icons/bilibili.min.svg"></i></a><a href="https://sighttp.qq.com/authd?IDKEY=2219800970" title="QQ" target="_blank" rel="noopener noreffer me"><i data-svg-src="/svg/icons/qq.min.svg"></i></a><a href="mailto:aphasia51@gmail.com" title="Email" rel=" me"><i class="far fa-envelope fa-fw"></i></a></div><h3 class="home-disclaimer">The more I know, the more I know my ignorance.</h3></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+            <a href="/radix-tree/" aria-label=Gin框架与Radix-Tree><img
+        class="lazyload"
+        data-src="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesgin1.jpg"
+        data-srcset="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesgin1.jpg, https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesgin1.jpg 1.5x, https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesgin1.jpg 2x"
+        data-sizes="auto"
+        alt="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesgin1.jpg"
+        title="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesgin1.jpg" height="auto" width="auto"></a>
+        </div><h1 class="single-title" itemprop="name headline">
+        <a href="/radix-tree/">Gin框架与Radix-Tree</a>
+    </h1><div class="post-meta">
+        <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="https://github.com/xiahuaS" title="Author" target="_blank" rel="noopener noreffer author" class="author">Aphasia</a>
+        </span>&nbsp;<span class="post-publish">published on <time datetime="2022-06-23">2022-06-23</time></span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-category">category <a href="/categories/go/"><i class="far fa-folder fa-fw"></i>go</a></span>&nbsp;<span class="post-category">and</span>&nbsp;<span class="post-series">series <a href="/series/gin/"><i class="far fa-list-alt fa-fw"></i>gin</a></span></div><div class="content">Gin框架与Radix Tree
+tags: [&ldquo;go&rdquo;, gin&quot;] categories: [&ldquo;go&rdquo;, &ldquo;gin&rdquo;]
+Trie字典树，前缀树。是一种有序多叉树结构，利用字符串的公共前缀来减少查询的时间。
+ 根节点不包含字符(目的是能包括所有字符串)，其余每个节点都只包含一个字符。 每个节点的子节点字符不同，保证唯一性。  Radix Tree前缀压缩树，优化了Trie的空间。如果树中某个父节点的子节点唯一，那么其子节点将与父节点合并，即一个节点可以包含多个字符串。</div><div class="post-footer">
+        <a href="/radix-tree/">Read more...</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">go</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
             <a href="/consistent_hash_algorithm/" aria-label=一致性哈希算法><img
         class="lazyload"
         data-src="https://cdn.jsdelivr.net/gh/aphasia51/images@main/blog/imagesv2-e5ea1e81b8609bd77a23794fb5ce2743_r.jpg"
@@ -179,7 +197,7 @@
         </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
             <i class="fas fa-comment fa-fw"></i>
         </a>
-    </div><div class="assets"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/fuse/fuse.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js"></script></div>
+    </div><div class="assets"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/fuse/fuse.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
 
 <div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"data":{"desktop-header-typeit":"Aphasia","mobile-header-typeit":"Aphasia"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"distance":100,"findAllMatches":true,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":true,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"No results found","snippetLength":300,"threshold":0.1,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"></div>
 </body>

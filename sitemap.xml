@@ -2,14 +2,18 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
+            <loc>https://aphasia51.github.io/</loc><lastmod>2022-06-23T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://aphasia51.github.io/categories/</loc><lastmod>2022-06-23T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://aphasia51.github.io/series/gin/</loc><lastmod>2022-06-23T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://aphasia51.github.io/radix-tree/</loc><lastmod>2022-06-23T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://aphasia51.github.io/tags/go/</loc><lastmod>2022-06-23T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://aphasia51.github.io/categories/go/</loc><lastmod>2022-06-23T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://aphasia51.github.io/posts/</loc><lastmod>2022-06-23T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://aphasia51.github.io/series/</loc><lastmod>2022-06-23T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://aphasia51.github.io/tags/</loc><lastmod>2022-06-23T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://aphasia51.github.io/series/algorithm/</loc><lastmod>2022-02-22T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://aphasia51.github.io/</loc><lastmod>2022-03-17T14:24:32&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://aphasia51.github.io/posts/</loc><lastmod>2022-03-17T14:24:32&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://aphasia51.github.io/series/</loc><lastmod>2022-02-22T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>https://aphasia51.github.io/consistent_hash_algorithm/</loc><lastmod>2022-02-22T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>https://aphasia51.github.io/demo/</loc><lastmod>2022-03-17T14:24:32&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>https://aphasia51.github.io/about/</loc><lastmod>2022-03-17T14:24:32&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>https://aphasia51.github.io/authors/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://aphasia51.github.io/categories/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://aphasia51.github.io/offline/</loc><lastmod>2022-03-17T14:24:32&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://aphasia51.github.io/tags/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url></urlset>
+            <loc>https://aphasia51.github.io/offline/</loc><lastmod>2022-03-17T14:24:32&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url></urlset>
