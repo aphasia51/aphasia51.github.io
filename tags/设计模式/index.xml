@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>设计模式 - Tag - Aphasia&#39;s personal blog</title>
+        <link>https://aphasia51.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+        <description>设计模式 - Tag - Aphasia&#39;s personal blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Aphasia51@gmail.com (Aphasia)</managingEditor>
+            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 05 Oct 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://aphasia51.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="self" type="application/rss+xml" /><item>
+    <title>Go与设计模式</title>
+    <link>https://aphasia51.github.io/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+    <pubDate>Wed, 05 Oct 2022 00:00:00 &#43;0000</pubDate><author>
+        <name>Aphasia</name>
+    </author><guid>https://aphasia51.github.io/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="https://aphasia51.oss-cn-chengdu.aliyuncs.com/blog/design-pattern.jpg" referrerpolicy="no-referrer">
+            </div><p>设计模式</p>]]></description>
+</item></channel>
+</rss>

@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>algorithm - Series - Aphasia&#39;s personal blog</title>
+        <link>https://aphasia51.github.io/series/algorithm/</link>
+        <description>algorithm - Series - Aphasia&#39;s personal blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Aphasia51@gmail.com (Aphasia)</managingEditor>
+            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 22 Feb 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://aphasia51.github.io/series/algorithm/" rel="self" type="application/rss+xml" /><item>
+    <title>一致性哈希算法</title>
+    <link>https://aphasia51.github.io/consistent_hash_algorithm/</link>
+    <pubDate>Tue, 22 Feb 2022 00:00:00 &#43;0000</pubDate><author>
+        <name>Aphasia</name>
+    </author><guid>https://aphasia51.github.io/consistent_hash_algorithm/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="https://aphasia51.oss-cn-chengdu.aliyuncs.com/blog/consistent_hash_algorithm.jpg" referrerpolicy="no-referrer">
+            </div><p>图解一致性哈希算法</p>]]></description>
+</item></channel>
+</rss>

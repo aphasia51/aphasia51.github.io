@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>redis - Series - Aphasia&#39;s personal blog</title>
+        <link>https://aphasia51.github.io/series/redis/</link>
+        <description>redis - Series - Aphasia&#39;s personal blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Aphasia51@gmail.com (Aphasia)</managingEditor>
+            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 26 Jul 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://aphasia51.github.io/series/redis/" rel="self" type="application/rss+xml" /><item>
+    <title>Redis数据持久化</title>
+    <link>https://aphasia51.github.io/redis-aof-rdb/</link>
+    <pubDate>Tue, 26 Jul 2022 00:00:00 &#43;0000</pubDate><author>
+        <name>Aphasia</name>
+    </author><guid>https://aphasia51.github.io/redis-aof-rdb/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="https://aphasia51.oss-cn-chengdu.aliyuncs.com/blog/redis-aof-rdb.png" referrerpolicy="no-referrer">
+            </div><p>图解Redis数据持久化</p>]]></description>
+</item></channel>
+</rss>

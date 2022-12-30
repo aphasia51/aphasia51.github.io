@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">Redis数据持久化 - Aphasia&#39;s personal blog</title><meta name="Description" content="Aphasia&#39;s persional blog"><meta property="og:title" content="Redis数据持久化" />
+<meta property="og:description" content="图解Redis数据持久化" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://aphasia51.github.io/redis-aof-rdb/" /><meta property="og:image" content="https://aphasia51.github.io/avatar.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-26T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-12-30T20:19:09+08:00" /><meta property="og:site_name" content="Hugo DoIt Theme Documentation" />
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://aphasia51.github.io/avatar.jpg"/>
+
+<meta name="twitter:title" content="Redis数据持久化"/>
+<meta name="twitter:description" content="图解Redis数据持久化"/>
+<meta name="application-name" content="Aphasia">
+<meta name="apple-mobile-web-app-title" content="Aphasia">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="wn.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://aphasia51.github.io/redis-aof-rdb/" /><link rel="prev" href="https://aphasia51.github.io/radix-tree/" /><link rel="next" href="https://aphasia51.github.io/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript>
+    
+    
+    
+    <meta name="google-site-verification" content="MQ8DNu27ayX6B_4ObiEDK09vGr1fdy7kOAnbd09hJk4" /><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Redis数据持久化",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/aphasia51.github.io\/redis-aof-rdb\/"
+        },"image": ["https:\/\/pic3.zhimg.com\/80\/v2-638986264022faadefd1d1a294a5a066_720w.jpg"],"genre": "posts","wordcount":  63 ,
+        "url": "https:\/\/aphasia51.github.io\/redis-aof-rdb\/","datePublished": "2022-07-26T00:00:00+00:00","dateModified": "2022-12-30T20:19:09+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Aphasia","logo": "https:\/\/aphasia51.github.io\/avatar.jpg"},"author": {
+                "@type": "Person",
+                "name": "Aphasia"
+            },"description": ""
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Aphasia&#39;s personal blog"><span class="header-title-pre"><i class='far fa-edit fa-fw'></i></span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"><i class="far fa-newspaper"></i> Posts </a><a class="menu-item" href="/tags/"><i class="fas fa-hashtag"></i> Tags </a><a class="menu-item" href="/categories/"><i class="fas fa-swatchbook"></i> Categories </a><a class="menu-item" href="/series/"><i class="fas fa-icons"></i> Series </a><a class="menu-item" href="/about/"><i class="far fa-address-card"></i> About </a><a class="menu-item" href="https://github.com/aphasia51" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-select" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                    <select class="color-theme-select" id="theme-select-desktop" title="Switch Theme">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="black">Black</option>
+                        <option value="auto">Auto</option>
+                    </select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Aphasia&#39;s personal blog"><span class="header-title-pre"><i class='far fa-edit fa-fw'></i></span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title=""><i class="far fa-newspaper"></i>Posts</a><a class="menu-item" href="/tags/" title=""><i class="fas fa-hashtag"></i>Tags</a><a class="menu-item" href="/categories/" title=""><i class="fas fa-swatchbook"></i>Categories</a><a class="menu-item" href="/series/" title=""><i class="fas fa-icons"></i>Series</a><a class="menu-item" href="/about/" title=""><i class="far fa-address-card"></i>About</a><a class="menu-item" href="https://github.com/aphasia51" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="#" onclick="return false;" class="menu-item theme-select" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+                <select class="color-theme-select" id="theme-select-mobile" title="Switch Theme">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="black">Black</option>
+                    <option value="auto">Auto</option>
+                </select>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">Contents</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#常见数据类型及数据结构">常见数据类型及数据结构</a></li>
+    <li><a href="#数据持久化">数据持久化</a>
+      <ul>
+        <li><a href="#aof">AOF</a>
+          <ul>
+            <li><a href="#写回策略">写回策略</a></li>
+            <li><a href="#aof重写机制">AOF重写机制</a></li>
+            <li><a href="#什么是写时复制">什么是写时复制？</a>
+              <ul>
+                <li><a href="#原理">原理</a></li>
+              </ul>
+            </li>
+            <li><a href="#总结">总结</a></li>
+          </ul>
+        </li>
+        <li><a href="#rdb">RDB</a>
+          <ul>
+            <li><a href="#怎么用rdb快照">怎么用RDB快照？</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis数据持久化</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="https://github.com/aphasia51" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Aphasia</a>
+                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-series">series <a href="/series/redis/"><i class="far fa-list-alt fa-fw"></i>redis</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-26">2022-07-26</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2022-12-30">2022-12-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;63 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>Series - redis</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul><li><span class="active">Redis数据持久化</span></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#常见数据类型及数据结构">常见数据类型及数据结构</a></li>
+    <li><a href="#数据持久化">数据持久化</a>
+      <ul>
+        <li><a href="#aof">AOF</a>
+          <ul>
+            <li><a href="#写回策略">写回策略</a></li>
+            <li><a href="#aof重写机制">AOF重写机制</a></li>
+            <li><a href="#什么是写时复制">什么是写时复制？</a>
+              <ul>
+                <li><a href="#原理">原理</a></li>
+              </ul>
+            </li>
+            <li><a href="#总结">总结</a></li>
+          </ul>
+        </li>
+        <li><a href="#rdb">RDB</a>
+          <ul>
+            <li><a href="#怎么用rdb快照">怎么用RDB快照？</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>图解Redis数据持久化</p>
+<h1 id="redis" class="headerLink">
+    <a href="#redis" class="header-mark"></a>Redis</h1><h2 id="常见数据类型及数据结构" class="headerLink">
+    <a href="#%e5%b8%b8%e8%a7%81%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e5%8f%8a%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84" class="header-mark"></a>常见数据类型及数据结构</h2><div align=center><img src="https://aphasia51.oss-cn-chengdu.aliyuncs.com/blog/redis_data_structure.png"></div>
+<h2 id="数据持久化" class="headerLink">
+    <a href="#%e6%95%b0%e6%8d%ae%e6%8c%81%e4%b9%85%e5%8c%96" class="header-mark"></a>数据持久化</h2><h3 id="aof" class="headerLink">
+    <a href="#aof" class="header-mark"></a>AOF</h3><blockquote>
+<p>保存写操作到日志的持久化方式，默认不开启(<code>appendonly  yes</code>)</p>
+</blockquote>
+<p>记录在AOF日志中的内容，会先在redis成功执行后再写入。这么做有两个好处：</p>
+<ul>
+<li>避免额外的检查开销</li>
+<li>不会阻塞当前命令的执行</li>
+</ul>
+<p>但是如果命令在执行后，写入日志前服务器宕机，该条数据就有丢失的风险。<br></p>
+<p>写操作执行完成再写入到AOF日志中虽不会阻塞当前操作，但有可能会阻塞下一个操作，因为命令写入日志这个动作是由主线程完成，磁盘I/O压力大时，写操作会变得很慢。<br></p>
+<p>从以上两点可知，风险的发生都和写入磁盘的时机有关，所以Redis给我们提供了3种写回策略。</p>
+<h4 id="写回策略" class="headerLink">
+    <a href="#%e5%86%99%e5%9b%9e%e7%ad%96%e7%95%a5" class="header-mark"></a>写回策略</h4><p>Redis写入AOF日志的流程:</p>
+<div align=center><img src="https://aphasia51.oss-cn-chengdu.aliyuncs.com/blog/aof_workframe.png"></div>
+<p>三种写回策略实际上就是决定内核缓冲区的数据何时写入到磁盘</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">写回策略</th>
+<th style="text-align:center">写回时机</th>
+<th style="text-align:center">优点</th>
+<th style="text-align:center">缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Always</td>
+<td style="text-align:center">同步写回</td>
+<td style="text-align:center">数据丢失可能性最小，可靠性比较高</td>
+<td style="text-align:center">每次写命令都需要落盘，性能消耗大</td>
+</tr>
+<tr>
+<td style="text-align:center">Everysec</td>
+<td style="text-align:center">每秒写回</td>
+<td style="text-align:center">性能适中</td>
+<td style="text-align:center">宕机时丢失1秒内数据</td>
+</tr>
+<tr>
+<td style="text-align:center">No</td>
+<td style="text-align:center">不主动写回，由内核决定</td>
+<td style="text-align:center">性能最好</td>
+<td style="text-align:center">宕机时可能会丢失较多数据</td>
+</tr>
+</tbody>
+</table>
+<p>实际上，这三种策略就是在控制<code>fsync</code>系统调用的发生的时机，内核将aof_buf文件的数据复制到内核缓冲区中就会进入队列，等待内核决定何时写入硬盘。</p>
+<ul>
+<li>Always策略：每次写入AOF文件数据后，立马执行fsync();</li>
+<li>Everysec策略：异步定时任务来执行fsync();</li>
+<li>No策略：不执行fsync();</li>
+</ul>
+<p>上面我们一直在说将数据写入AOF日志，那么AOF日志就会越来越大，如果Redis需要重启，那么数据的回复也是一个比较耗时的过程(我们都知道AOF日志中记录的是其他格式的命令，所以文件过大，命令重放就会很慢)。所以就有了AOF重写机制</p>
+<br>
+<h4 id="aof重写机制" class="headerLink">
+    <a href="#aof%e9%87%8d%e5%86%99%e6%9c%ba%e5%88%b6" class="header-mark"></a>AOF重写机制</h4><p>重写时候，扫描当前数据库中的所有键值对，将每一个键值对用一条命令记录到<code>新的AOF文件</code>，全部记录后再替换。很容易想到，如果之前我们对一个键值对中的值执行了更新操作，那么新的AOF文件中就只会记录最新的键值对对应的命令，之前的更新操作不会再记录，这样一来AOF文件就会压缩。但是仔细一想，重写的过程是比较耗时的，所以需要主进程fork一个子进程来<strong>bgwriteaof</strong>完成这个操作。</p>
+<br>
+<p>既然需要fork子进程，那fork时就一定会阻塞主进程，虽然fork会采用写时复制机制，但是fork子进程也需要拷贝必要的数据结构(内存页表等)，这个拷贝的过程也需要消耗大量CPU资源，也就是说在fork完成前主进程是阻塞的。</p>
+<p>拷贝内存页表完成后，父子进程才指向相同的内存地址空间，但子进程并没有申请与父进程同样大小的内存，这里就会用到写时复制机制了，就是字面意思-写得时候才会复制，即拷贝真正的数据。</p>
+<br>
+<p>这里可能会有人有疑问，为什么不直接在现有的AOF日志文件中操作，而要新创建一个文件？</p>
+<ul>
+<li>上面我们提到，会有子进程来完成AOF文件的写入，如果复用AOF文件，那么必然产生父子进程竞争问题，影响父进程性能。</li>
+<li>如果我们在重写时失败，那么可能会造成原来的AOF文件也被污染而无法使用。用新的AOF文件，即使失败，直接删除即可。<br></li>
+</ul>
+<br>
+<p>前面我们提到AOF重写是子进程<strong>bgwriteaof</strong>来完成的，既然是子进程，那么就不会影响主进程的操作，也不会阻塞主进程。那为什么使用子进程而不是子线程呢？</p>
+<p>设想如果我们使用了子线程，在修改共享内存数据的时候需要加锁来保证安全，可想而知性能就会降低。如果使用子进程，虽然父子进程也会共享内存数据，但是这个<code>共享的内存</code>是以只读的方式，就是说当父子进程任一方修改了数据，就会发生写时复制，这样父子进程就拥有了独立的数据副本，不用加锁来保证数据安全。<br></p>
+<h4 id="什么是写时复制" class="headerLink">
+    <a href="#%e4%bb%80%e4%b9%88%e6%98%af%e5%86%99%e6%97%b6%e5%a4%8d%e5%88%b6" class="header-mark"></a>什么是写时复制？</h4><p>在Linux中，调用fork系统调用创建子进程时候，并不会复制父进程的内存页，而是与父进程共用相同的内存页，只有当父子进程的任一方对内存页做修改时才会进行复制，这就是写时复制。</p>
+<div align=center><img src="https://aphasia51.oss-cn-chengdu.aliyuncs.com/blog/copy-on-write.png"></div>
+<h5 id="原理" class="headerLink">
+    <a href="#%e5%8e%9f%e7%90%86" class="header-mark"></a>原理</h5><p>1、创建子进程时，父进程的虚拟内存与物理内存关系会复制一份给子进程，并把内存设置为只读。这里父子进程共享内存数据，这样做有两个好处：</p>
+<ul>
+<li>加速子进程的创建</li>
+<li>减少进程对物理内存的占用</li>
+</ul>
+<p>这里把内存设置为只读，是为了当对内存进行写操作时，会触发<a href="https://cloud.tencent.com/developer/article/1807351" target="_blank" rel="noopener noreferrer">缺页异常</a>(无写权限，无法获取数据)，这样内核在缺页异常处理函数中就可以进行内存页的复制。</p>
+<p>2、当父进程或子进程对内存数据做出修改时候，就会触发写时复制。这里会复制内存页，并重新设置映射关系，同时将父子进程的虚拟页设置为可读写，即父子进程拥有了各自的虚拟内存与对应的物理内存。</p>
+<br>
+<p>话说回来，让我们继续看看AOF重写。</p>
+<p>上面已经说过，子进程重写过程中主进程会正常处理命令，如果此时主进程修改了已存在的键值对就会发生写时复制。这里值得注意的地方是写时复制机制此时只会复制主进程修改的物理内存数据，没有修改物理内存子进程还是会和父进程共享。这里就能提出一个问题，修改数据后，父子进程的内存数据就不一样了，这可咋整呢？</p>
+<br>
+<p>Redis设置了一个AOF重写缓冲区来解决这个问题，这个缓冲区在创建bgwriteaof子进程后开始使用，即重写AOF时，Redis成功执行完一个命令后会把这个命令写到<code>AOF缓冲区</code>和<code>AOF重写缓冲区</code>。</p>
+<p>子进程完成AOF重写后，会向主进程发送一条信号(异步),主进程收到该信号以后，就会将AOF重写缓冲区的内容追加到新的AOF文件中，然后用新的AOF文件覆盖当前AOF文件。至此，完成AOF重写操作。</p>
+<br>
+<p>另外，如果此时主进程修改的是一个bigkey(value很大，不是key很大)，那么父进程在申请内存时阻塞的风险就会提高，复制物理内存也比较耗时，有阻塞主进程的风险，</p>
+<h4 id="总结" class="headerLink">
+    <a href="#%e6%80%bb%e7%bb%93" class="header-mark"></a>总结</h4><p>整个AOF持久化机制中，有哪些操作可能会阻塞主进程？</p>
+<ul>
+<li>命令执行完，写入AOF日志操作完成前。写入AOF日志这个操作是主进程完成的，如果此时磁盘写压力大，那么在写入该命令时就可能发生阻塞，导致后续的操作无法正常进行。</li>
+<li>主进程fork子进程进行AOF重写时，系统调用fork操作一定会阻塞主进程。</li>
+<li>写时复制时，父进程操作大key，重新申请大块内存时间耗时就会变长，造成父进程阻塞。</li>
+</ul>
+<br>
+<h3 id="rdb" class="headerLink">
+    <a href="#rdb" class="header-mark"></a>RDB</h3><p>RDB(Redis Database)是Redis数据持久化的另一种方式：内存快照，即记录某一时刻内存中的数据，类似于拍照时记录某一瞬间的形象。</p>
+<p>和AOF相比，RDB恢复数据的效率更高，因为RDB快照记录的是实际数据，恢复时直接将RDB文件读入内存就行。</p>
+<h4 id="怎么用rdb快照" class="headerLink">
+    <a href="#%e6%80%8e%e4%b9%88%e7%94%a8rdb%e5%bf%ab%e7%85%a7" class="header-mark"></a>怎么用RDB快照？</h4></div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-12-30&nbsp;<a class="git-hash" href="https://github.com/aphasia51/aphasia51.github.io/commit/183a9dab8fc88a247b897ece89cd71c0fa26fbf8" target="_blank" title="commit by aphasia51(xiahuas@outlook.com) 183a9dab8fc88a247b897ece89cd71c0fa26fbf8: update for replace the host" rel="noopener noreferrer">
+                                    <i class="fas fa-hashtag fa-fw"></i>183a9da</a></span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/redis-aof-rdb/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
+                    </span><span>|&nbsp;<a class="link-to-edit" href=https://github.com/aphasia51/aphasia51.github.io/edit/main/exampleSite/content/posts/redis/Redis-aof-rdb.md target="_blank" rel="noopener noreferrer">Edit this page</a>
+                    </span><span>|&nbsp;<a class="link-to-report" href=https://github.com/aphasia51/aphasia51.github.io/issues/new?title=[bug]%20Redis%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96&body=|Field|Value|%0A|-|-|%0A|Title|Redis%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96|%0A|Url|https://aphasia51.github.io/redis-aof-rdb/|%0A|Filename|https://github.com/HEIGE-PCloud/DoIt/blob/main/exampleSite/content/posts/redis/Redis-aof-rdb.md| target="_blank" rel="noopener noreferrer">Report issue</a>
+                    </span></div>
+            <div class="post-info-share">
+                <span><a href="#" onclick="return false;" title="Share on Twitter" data-sharer="twitter" data-url="https://aphasia51.github.io/redis-aof-rdb/" data-title="Redis数据持久化"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="Share on Facebook" data-sharer="facebook" data-url="https://aphasia51.github.io/redis-aof-rdb/"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="Share on Hacker News" data-sharer="hackernews" data-url="https://aphasia51.github.io/redis-aof-rdb/" data-title="Redis数据持久化"><i class="fab fa-hacker-news fa-fw"></i></a><a href="#" onclick="return false;" title="Share on Line" data-sharer="line" data-url="https://aphasia51.github.io/redis-aof-rdb/" data-title="Redis数据持久化"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" onclick="return false;" title="Share on 微博" data-sharer="weibo" data-url="https://aphasia51.github.io/redis-aof-rdb/" data-title="Redis数据持久化"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="Share on 百度" data-sharer="baidu" data-url="https://aphasia51.github.io/redis-aof-rdb/" data-title="Redis数据持久化"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></i></a><a href="#" onclick="return false;" title="Share on Telegram" data-sharer="telegram" data-url="https://aphasia51.github.io/redis-aof-rdb/" data-title="Redis数据持久化" data-web><i class="fab fa-telegram-plane fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/radix-tree/" class="prev" rel="prev" title="Gin框架与Radix-Tree"><i class="fas fa-angle-left fa-fw"></i>Gin框架与Radix-Tree</a>
+            <a href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="next" rel="next" title="Go与设计模式">Go与设计模式<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="giscus"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app/">giscus</a>.
+            </noscript></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">If the articles can help you, it's great!</div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/aphasia51" target="_blank" rel="noopener noreferrer">Aphasia</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp">蜀ICP备2021015196号-1</span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div><script>
+                    if('serviceWorker' in navigator) {
+                        navigator.serviceWorker
+                            .register('/sw.min.js', { scope: '/' })
+                            .then(function(registration) {
+                            });
+                
+                        navigator.serviceWorker
+                            .ready
+                            .then(function(registration) {
+                            });
+                    }
+                </script></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="Back to Top">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/fuse/fuse.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+
+<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{"giscus":{"darkTheme":"dark","dataCategory":"Announcements","dataCategoryId":"DIC_kwDOHBDwQ84CO8vY","dataEmitMetadata":"0","dataInputPosition":"bottom","dataLang":"en","dataMapping":"pathname","dataReactionsEnabled":"1","dataRepo":"aphasia51/aphasia51.github.io","dataRepoId":"R_kgDOHBDwQw","dataStrict":"0","lightTheme":"light"}},"data":{"desktop-header-typeit":"Aphasia","mobile-header-typeit":"Aphasia"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"distance":100,"findAllMatches":true,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":true,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"No results found","snippetLength":300,"threshold":0.1,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/giscus.min.js" defer></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"></div>
+</body>
+
+</html>
