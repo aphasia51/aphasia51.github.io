@@ -10,7 +10,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://aphasia51.github.io/redis-aof-rdb/" /><meta property="og:image" content="https://aphasia51.github.io/avatar.jpg"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-07-26T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-12-30T20:19:09+08:00" /><meta property="og:site_name" content="Hugo DoIt Theme Documentation" />
+<meta property="article:modified_time" content="2023-03-20T14:25:49+08:00" /><meta property="og:site_name" content="Hugo DoIt Theme Documentation" />
 
 
 <meta name="twitter:card" content="summary_large_image"/>
@@ -37,7 +37,7 @@
             "@type": "WebPage",
             "@id": "https:\/\/aphasia51.github.io\/redis-aof-rdb\/"
         },"image": ["https:\/\/pic3.zhimg.com\/80\/v2-638986264022faadefd1d1a294a5a066_720w.jpg"],"genre": "posts","wordcount":  71 ,
-        "url": "https:\/\/aphasia51.github.io\/redis-aof-rdb\/","datePublished": "2022-07-26T00:00:00+00:00","dateModified": "2022-12-30T20:19:09+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+        "url": "https:\/\/aphasia51.github.io\/redis-aof-rdb\/","datePublished": "2022-07-26T00:00:00+00:00","dateModified": "2023-03-20T14:25:49+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Aphasia","logo": "https:\/\/aphasia51.github.io\/avatar.jpg"},"author": {
                 "@type": "Person",
@@ -160,7 +160,7 @@
             <div class="post-meta-line">
                 <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="https://github.com/aphasia51" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Aphasia</a>
                 </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-series">series <a href="/series/redis/"><i class="far fa-list-alt fa-fw"></i>redis</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-26">2022-07-26</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2022-12-30">2022-12-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;71 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-26">2022-07-26</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-03-20">2023-03-20</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;71 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
@@ -264,7 +264,7 @@
 <p>上面我们一直在说将数据写入AOF日志，那么AOF日志就会越来越大，如果Redis需要重启，那么数据的回复也是一个比较耗时的过程(我们都知道AOF日志中记录的是其他格式的命令，所以文件过大，命令重放就会很慢)。所以就有了AOF重写机制</p>
 <br>
 <h4 id="aof重写机制" class="headerLink">
-    <a href="#aof%e9%87%8d%e5%86%99%e6%9c%ba%e5%88%b6" class="header-mark"></a>AOF重写机制</h4><p>重写时候，扫描当前数据库中的所有键值对，将每一个键值对用一条命令记录到<code>新的AOF文件</code>，全部记录后再替换。很容易想到，如果之前我们对一个键值对中的值执行了更新操作，那么新的AOF文件中就只会记录最新的键值对对应的命令，之前的更新操作不会再记录，这样一来AOF文件就会压缩。但是仔细一想，重写的过程是比较耗时的，所以需要主进程fork一个子进程来<strong>bgwriteaof</strong>完成这个操作。</p>
+    <a href="#aof%e9%87%8d%e5%86%99%e6%9c%ba%e5%88%b6" class="header-mark"></a>AOF重写机制</h4><p>重写时候，扫描当前数据库中的所有键值对，将每一个键值对用一条命令记录到<code>新的AOF文件</code>，全部记录后再替换。很容易想到，如果之前我们对一个键值对中的值执行了更新操作，那么新的AOF文件中就只会记录最新的键值对对应的命令，之前的更新操作不会再记录，这样一来AOF文件就会压缩。但是仔细一想，重写的过程是比较耗时的，所以需要主进程fork一个子进程来<strong>bgrewriteaof</strong>完成这个操作。</p>
 <br>
 <p>既然需要fork子进程，那fork时就一定会阻塞主进程，虽然fork会采用写时复制机制，但是fork子进程也需要拷贝必要的数据结构(内存页表等)，这个拷贝的过程也需要消耗大量CPU资源，也就是说在fork完成前主进程是阻塞的。</p>
 <p>拷贝内存页表完成后，父子进程才指向相同的内存地址空间，但子进程并没有申请与父进程同样大小的内存，这里就会用到写时复制机制了，就是字面意思-写得时候才会复制，即拷贝真正的数据。</p>
@@ -275,7 +275,7 @@
 <li>如果我们在重写时失败，那么可能会造成原来的AOF文件也被污染而无法使用。用新的AOF文件，即使失败，直接删除即可。<br></li>
 </ul>
 <br>
-<p>前面我们提到AOF重写是子进程<strong>bgwriteaof</strong>来完成的，既然是子进程，那么就不会影响主进程的操作，也不会阻塞主进程。那为什么使用子进程而不是子线程呢？</p>
+<p>前面我们提到AOF重写是子进程<strong>bgrewriteaof</strong>来完成的，既然是子进程，那么就不会影响主进程的操作，也不会阻塞主进程。那为什么使用子进程而不是子线程呢？</p>
 <p>设想如果我们使用了子线程，在修改共享内存数据的时候需要加锁来保证安全，可想而知性能就会降低。如果使用子进程，虽然父子进程也会共享内存数据，但是这个<code>共享的内存</code>是以只读的方式，就是说当父子进程任一方修改了数据，就会发生写时复制，这样父子进程就拥有了独立的数据副本，不用加锁来保证数据安全。<br></p>
 <h4 id="什么是写时复制" class="headerLink">
     <a href="#%e4%bb%80%e4%b9%88%e6%98%af%e5%86%99%e6%97%b6%e5%a4%8d%e5%88%b6" class="header-mark"></a>什么是写时复制？</h4><p>在Linux中，调用fork系统调用创建子进程时候，并不会复制父进程的内存页，而是与父进程共用相同的内存页，只有当父子进程的任一方对内存页做修改时才会进行复制，这就是写时复制。</p>
@@ -292,7 +292,7 @@
 <p>话说回来，让我们继续看看AOF重写。</p>
 <p>上面已经说过，子进程重写过程中主进程会正常处理命令，如果此时主进程修改了已存在的键值对就会发生写时复制。这里值得注意的地方是写时复制机制此时只会复制主进程修改的物理内存数据，没有修改物理内存子进程还是会和父进程共享。这里就能提出一个问题，修改数据后，父子进程的内存数据就不一样了，这可咋整呢？</p>
 <br>
-<p>Redis设置了一个AOF重写缓冲区来解决这个问题，这个缓冲区在创建bgwriteaof子进程后开始使用，即重写AOF时，Redis成功执行完一个命令后会把这个命令写到<code>AOF缓冲区</code>和<code>AOF重写缓冲区</code>。</p>
+<p>Redis设置了一个AOF重写缓冲区来解决这个问题，这个缓冲区在创建bgrewriteaof子进程后开始使用，即重写AOF时，Redis成功执行完一个命令后会把这个命令写到<code>AOF缓冲区</code>和<code>AOF重写缓冲区</code>。</p>
 <p>子进程完成AOF重写后，会向主进程发送一条信号(异步),主进程收到该信号以后，就会将AOF重写缓冲区的内容追加到新的AOF文件中，然后用新的AOF文件覆盖当前AOF文件。至此，完成AOF重写操作。</p>
 <br>
 <p>另外，如果此时主进程修改的是一个bigkey(value很大，不是key很大)，那么父进程在申请内存时阻塞的风险就会提高，复制物理内存也比较耗时，有阻塞主进程的风险，</p>
@@ -323,8 +323,8 @@ bgsave这一子进程是由主线程fork出来共享主线程内存数据的。�
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2022-12-30&nbsp;<a class="git-hash" href="https://github.com/aphasia51/aphasia51.github.io/commit/183a9dab8fc88a247b897ece89cd71c0fa26fbf8" target="_blank" title="commit by aphasia51(xiahuas@outlook.com) 183a9dab8fc88a247b897ece89cd71c0fa26fbf8: update for replace the host" rel="noopener noreferrer">
-                                    <i class="fas fa-hashtag fa-fw"></i>183a9da</a></span>
+                <span>Updated on 2023-03-20&nbsp;<a class="git-hash" href="https://github.com/aphasia51/aphasia51.github.io/commit/1e2d573434bca287699d2c7a0c348eb1401e7e5d" target="_blank" title="commit by aphasia51(xiahuas@outlook.com) 1e2d573434bca287699d2c7a0c348eb1401e7e5d: update" rel="noopener noreferrer">
+                                    <i class="fas fa-hashtag fa-fw"></i>1e2d573</a></span>
             </div>
             <div class="post-info-license"></div>
         </div>

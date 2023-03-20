@@ -4,5 +4,14 @@
         <link>https://aphasia51.github.io/posts/</link>
         <description>All Posts | Aphasia&#39;s personal blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Aphasia51@gmail.com (Aphasia)</managingEditor>
-            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 05 Oct 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://aphasia51.github.io/posts/" rel="self" type="application/rss+xml" /></channel>
+            <webMaster>Aphasia51@gmail.com (Aphasia)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 05 Oct 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://aphasia51.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Redis数据持久化</title>
+    <link>https://aphasia51.github.io/redis-aof-rdb/</link>
+    <pubDate>Tue, 26 Jul 2022 00:00:00 &#43;0000</pubDate><author>
+        <name>Aphasia</name>
+    </author><guid>https://aphasia51.github.io/redis-aof-rdb/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="https://aphasia51.oss-cn-chengdu.aliyuncs.com/blog/redis-aof-rdb.png" referrerpolicy="no-referrer">
+            </div><p>图解Redis数据持久化</p>]]></description>
+</item></channel>
 </rss>
